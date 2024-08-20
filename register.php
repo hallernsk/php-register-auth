@@ -10,17 +10,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'];
     $confirm_password = $_POST['confirm_password'];
 
+    // Проверка совпадения паролей
     if ($password !== $confirm_password) {
         $errors[] = 'Пароли не совпадают.';
     }
 
-    $sql = "SELECT * FROM users WHERE phone = '$phone' OR email = '$email'";
-    $result = mysqli_query($db_connect, $sql);
+    // Проверка существования пользователя
+    if (empty($errors)) {
+        $sql = "SELECT * FROM users WHERE phone = '$phone' OR email = '$email'";
+        $result = mysqli_query($db_connect, $sql);
 
-    if (mysqli_fetch_assoc($result)) {
-        $errors[] = 'Пользователь с таким телефоном или email уже существует.';
+        if (mysqli_fetch_assoc($result)) {
+            $errors[] = 'Пользователь с таким телефоном или email уже существует.';
+        }
     }
 
+    // Регистрация нового пользователя
     if (empty($errors)) {
         $password_hash = password_hash($password, PASSWORD_DEFAULT);
 
@@ -43,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <h2>Регистрация</h2>
     <?php foreach ($errors as $error): ?>
-        <p ><?php echo $error; ?></p>
+        <p style="color: red;"><?php echo $error; ?></p>
     <?php endforeach; ?>
     <form method="post">
         <label>Имя: <input type="text" name="name" required></label><br>        

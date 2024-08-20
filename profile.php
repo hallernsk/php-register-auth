@@ -6,6 +6,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 require_once 'db_connect.php';
+require_once 'functions.php';
 $user_id = $_SESSION['user_id'];
 
 $errors = [];
@@ -17,10 +18,8 @@ if (isset($_POST['logout'])) {
     exit;
 }
 
-// Получение текущей информации о пользователе
-$sql = "SELECT * FROM users WHERE id = '$user_id'";
-$result = mysqli_query($db_connect, $sql);
-$user = mysqli_fetch_assoc($result);
+// Получение данных пользователя
+$user = getUserByLogin($db_connect, $login);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = trim($_POST['name']);
