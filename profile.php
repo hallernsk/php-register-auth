@@ -5,11 +5,17 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-include 'db_connect.php';
+require_once 'db_connect.php';
 $user_id = $_SESSION['user_id'];
 
 $errors = [];
 $success = '';
+
+if (isset($_POST['logout'])) {
+    session_destroy();
+    header('Location: index.php');
+    exit;
+}
 
 // Получение текущей информации о пользователе
 $sql = "SELECT * FROM users WHERE id = '$user_id'";
@@ -28,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $result = mysqli_query($db_connect, $sql);
 
         if (mysqli_fetch_assoc($result)) {
-            $errors[] = 'Пользователь с таким email или телефоном уже существует.';
+            $errors[] = 'Пользователь с таким телефоном или email уже существует.';
         }
     }
 
@@ -83,12 +89,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <?php if ($success): ?>
         <p style="color: green;"><?php echo htmlspecialchars($success); ?></p>
     <?php endif; ?>
+
+        <!-- Форма для обновления информации -->
     <form method="post">
         <label>Имя: <input type="text" name="name" value="<?= htmlspecialchars($user['name']); ?>" required></label><br>
-        <label>Email: <input type="email" name="email" value="<?= htmlspecialchars($user['email']); ?>" required></label><br>
         <label>Телефон: <input type="text" name="phone" value="<?= htmlspecialchars($user['phone']); ?>" required></label><br>
+        <label>Email: <input type="email" name="email" value="<?= htmlspecialchars($user['email']); ?>" required></label><br>
         <label>Новый пароль: <input type="password" name="password"></label> (Оставьте пустым, если не хотите менять пароль)<br>
         <button type="submit">Обновить</button>
+    </form>
+
+        <!-- Форма выхода -->
+    <form method="post">
+        <button type="submit" name="logout">Выход</button>
     </form>
 </body>
 </html>
