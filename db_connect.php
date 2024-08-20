@@ -2,7 +2,7 @@
 
 $servername = "localhost";
 $username = "root";
-$password = "1234";
+$password = "root";
 $dbname = "php-register-auth";
 
 $db_connect = mysqli_connect("$servername", "$username", "$password", "$dbname");
