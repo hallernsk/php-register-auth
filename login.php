@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <!-- Yandex SmartCaptcha -->
         <div
             class="smart-captcha"
-            data-sitekey="ysc1_rcB9zDPJfOi4Wl2ZL1C9ihhx607NqhP60TbJ7AFpf5d9ad20"
+            data-sitekey="test_site_key_1234567890"
         ></div>
 
         <button type="submit">Войти</button>
